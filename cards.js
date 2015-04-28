@@ -1,6 +1,7 @@
 var values  = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"];
 var suits   = ["Clubs", "Diamonds", "Hearts", "Spades"];
 var deck = [];
+
 function shuffle(array){
   var currentIndex = array.length;
   var randomIndex;
@@ -16,27 +17,50 @@ function shuffle(array){
   return(array);
 }
 
+function translateCardValues(card) {
+  // goal: take a card value and return a number for comparison later in highcard()
+  if (card === "J") {
+    return 11;
+  } else if (card === "Q") {
+    return 12;
+  } else if (card === "K") {
+    return 13;
+  } else if (card === "A") {
+    return 14;
+  } else {
+    return card;
+  }
+}
+
 
 function buildDeck(){
 
 for(var i = 0; i < suits.length; i++){
   for(var x = 0; x < values.length; x++){
-    deck.push(suits[i] + ' ' + values[x]);
+      // { suit: "Spades", value: "A"}
+      deck.push({
+        suit: suits[i],
+        value: values[x],
+        numericValue: translateCardValues(values[x]),
+        display: function () {
+          return this.suit + " " + this.value;
+        }
+      });
     }
   }
-    return deck
+    return deck;
 }
 
 function highcard() {
-player1 = deck.pop();
-player2 = deck.pop();
-console.log(player1 + ' ' + player2);
+  var player1Card = deck.pop();
+  var player2Card = deck.pop();
+  console.log(player1Card.display() + ' ' + player2Card.display());
 
-  if (player1 > player2) {
-    console.log('player 1 wins ' + player1);
-  } else if (player2 > player1) {
-    console.log('player 2 wins ' + player2);
-  } else if (player2 === player1) {
+  if (player1Card.numericValue > player2Card.numericValue) {
+    console.log('player 1 wins ' + player1Card.display());
+  } else if (player2Card.numericValue > player1Card.numericValue) {
+    console.log('player 2 wins ' + player2Card.display());
+  } else {
     console.log('player 1 and player 2 tie!');
   }
 
